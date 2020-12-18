@@ -9,6 +9,8 @@ echo '端口列表:'
 echo ports: $list
 echo
 
+echo ''
+
 echo '输出文件列表:'
 
 for i in $list; do
@@ -36,6 +38,6 @@ if [ $choice == "Y" ]; then
 			now=`expr $now + 1`
 			filename=${pref}_${now}.csv 
 		done
-		zmap -B 500kb -p $i -o port$i.csv $network
+		echo zmap -B 500kb -p $i -o $filename $network
 	done
 fi
