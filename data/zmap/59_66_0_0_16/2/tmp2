@@ -1,0 +1,4 @@
+# Nmap 7.60 scan initiated Thu Dec 24 13:50:57 2020 as: nmap -O -oG tmp2 59.66.3.252
+Host: 59.66.3.252 ()	Status: Up
+Host: 59.66.3.252 ()	Ports: 179/open/tcp//bgp///	Ignored State: filtered (999)	OS: Juniper MX960 router (JUNOS 9.5R3.7)	Seq Index: 259	IP ID Seq: Busy server or unknown class
+# Nmap done at Thu Dec 24 13:51:19 2020 -- 1 IP address (1 host up) scanned in 22.01 seconds
