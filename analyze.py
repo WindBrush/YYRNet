@@ -31,36 +31,52 @@ def analyze_os(network_list):
     print(os_cnt)
 
 
-def analyze_route(network_list):
-    network = '118.229.0.0/19'
-    result_dir = os.path.join(TRACEROUTE_DIR, network.replace('.', '_').replace('/', '_'))
-    result_names = os.listdir(result_dir)
+def analyze_route(network_list, color_list, default_color):
+    network = '183.172.0.0/16'
     graph = nx.Graph()
-    start_node_color = '#ffff00'
-    for result_name in result_names:
-        result_path = os.path.join(result_dir, result_name)
-        with open(result_path, 'r') as f:
-            lines = f.readlines()
-            ips_list = []
-            for i in range(1, len(lines)):
-                ips = re.findall(r'\d+\.\d+\.\d+\.\d+', lines[i])
-                if len(ips) == 0:
-                    break
-                ips_list.append(ips)
-                graph.add_nodes_from(ips, label=False)
-            # print(ips_list)
-            for i in range(0, len(ips_list)-1):
-                ips1 = ips_list[i]
-                ips2 = ips_list[i+1]
-                for ip1 in ips1:
-                    for ip2 in ips2:
-                        graph.add_edge(ip1, ip2)
-    #    break
+    router_dict = {}
+    for network in network_list:
+        result_dir = os.path.join(TRACEROUTE_DIR, network.replace('.', '_').replace('/', '_'))
+        if not os.path.exists(result_dir):
+            continue
+        result_names = os.listdir(result_dir)
+        for result_name in result_names:
+            result_path = os.path.join(result_dir, result_name)
+            with open(result_path, 'r') as f:
+                lines = f.readlines()
+                ips_list = []
+                for i in range(1, len(lines)):
+                    ips = re.findall(r'\d+\.\d+\.\d+\.\d+', lines[i])
+                    if len(ips) == 0:
+                        break
+                    ips_list.append(ips)
+                    graph.add_nodes_from(ips, label=False)
+                # print(ips_list)
+                for i in range(0, len(ips_list)-1):
+                    if 0 < i < len(ips_list)-1:
+                        for ip in ips_list[i]:
+                            router_dict[ip] = True
+                    ips1 = ips_list[i]
+                    ips2 = ips_list[i+1]
+                    for ip1 in ips1:
+                        for ip2 in ips2:
+                            graph.add_edge(ip1, ip2)
+        #    break
+    color_map = []
+    for node in graph:
+        color = default_color
+        for network_id in range(len(network_list)):
+            if network_list[network_id][:7] == node[:7]:
+                color = color_list[network_id]
+        color_map.append(color)
     plt.figure()
-    nx.draw_networkx(graph, with_labels=True)
-    plt.show()
+    print(router_dict.items())
+    print(len(router_dict.items()))
+
+    # nx.draw_networkx(graph, node_color=color_map, with_labels=True)
+    # plt.show()
 
 
 if __name__ == '__main__':
     # analyze_os(NETWORK_LIST)
-    analyze_route(NETWORK_LIST)
+    analyze_route(NETWORK_LIST, COLOR_LIST, DEFAULT_COLOR)

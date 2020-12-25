@@ -15,16 +15,16 @@ def single_traceroute(ip, save_path):
 
 
 def traceroute(network_list):
+    pool = Pool(processes=16)
     for network in network_list:
         result_dir = os.path.join(TRACEROUTE_DIR, network.replace('.', '_').replace('/', '_'))
         os.makedirs(result_dir, exist_ok=True)
         ips = IP(network)
-        pool = Pool(processes=16)
         for ip in ips:
             save_path = os.path.join(result_dir, str(ip).replace('.', '_') + '.log')
             pool.apply_async(single_traceroute, args=(ip, save_path))
-        pool.close()
-        pool.join()
+    pool.close()
+    pool.join()
 
 
 if __name__ == '__main__':
