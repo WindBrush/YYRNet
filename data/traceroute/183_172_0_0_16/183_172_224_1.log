@@ -1,0 +1,2 @@
+traceroute to 183.172.224.1 (183.172.224.1), 7 hops max, 60 byte packets
+ 1  183.172.224.1  6.458 ms  6.446 ms  7.091 ms
