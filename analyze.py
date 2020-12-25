@@ -36,7 +36,7 @@ def analyze_route(network_list):
     result_dir = os.path.join(TRACEROUTE_DIR, network.replace('.', '_').replace('/', '_'))
     result_names = os.listdir(result_dir)
     graph = nx.Graph()
-    start_node_color = '#b00000'
+    start_node_color = '#ffff00'
     start_node_name = 'me'
     graph.add_node(start_node_name, node_color=start_node_color)
     for result_name in result_names:
@@ -48,8 +48,6 @@ def analyze_route(network_list):
                 ips = re.findall(r'\d+\.\d+\.\d+\.\d+', lines[i])
                 if len(ips) == 0:
                     break
-                if '118.229.1.253' in ips:
-                    print(ips, lines)
                 ips_list.append(ips)
                 graph.add_nodes_from(ips, label=False)
             # print(ips_list)

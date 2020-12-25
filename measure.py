@@ -4,10 +4,14 @@ from multiprocessing import Pool
 from IPy import IP
 
 
-def execute(order):
-    """ 执行单条指令 """
-    print('Executing: ', order)
-    os.system(order)
+def single_traceroute(ip, save_path):
+    """ 执行单条 traceroute 指令 """
+    order = 'traceroute -I -m 7 -n -w 1 %s > %s' % (ip, save_path)
+    if os.path.exists(save_path):
+        print('Pass: ', order)
+    else:
+        print('Executing: ', order)
+        os.system(order)
 
 
 def traceroute(network_list):
@@ -17,9 +21,8 @@ def traceroute(network_list):
         ips = IP(network)
         pool = Pool(processes=16)
         for ip in ips:
-            save_path = os.path.join(result_dir, str(ip).replace('.', '_'))
-            order = 'traceroute -I -m 7 -n -w 1 %s > %s.log' % (ip, save_path)
-            pool.apply_async(execute, args=(order,))
+            save_path = os.path.join(result_dir, str(ip).replace('.', '_') + '.log')
+            pool.apply_async(single_traceroute, args=(ip, save_path))
         pool.close()
         pool.join()
 
