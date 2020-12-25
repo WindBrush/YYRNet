@@ -37,13 +37,11 @@ def analyze_route(network_list):
     result_names = os.listdir(result_dir)
     graph = nx.Graph()
     start_node_color = '#ffff00'
-    start_node_name = 'me'
-    graph.add_node(start_node_name, node_color=start_node_color)
     for result_name in result_names:
         result_path = os.path.join(result_dir, result_name)
         with open(result_path, 'r') as f:
             lines = f.readlines()
-            ips_list = [[start_node_name]]
+            ips_list = []
             for i in range(1, len(lines)):
                 ips = re.findall(r'\d+\.\d+\.\d+\.\d+', lines[i])
                 if len(ips) == 0:
